@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Oracle and ActiveRecord on Linux</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Aaron Chambers">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+<link href='/assets/stylesheets/bootstrap.min-88238289010db19359d2181e634e95cd.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/assets/stylesheets/style-e81fa375b231bedf6cb2dbc6653570cc.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/assets/stylesheets/google_prettify/sons-of-obsidian-afb0925bfa2d994f17dab93e13fbf999.css' type='text/css' rel='stylesheet' media='all'>
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Aaron's Blog</a>
+          <ul class="nav">
+              
+                <li><a href="/archive">Archive</a></li>
+              
+              
+                <li><a href="/tags">Tags</a></li>
+              
+              
+                <li><a href="/categories">Categories</a></li>
+              
+              
+                <li><a href="/pages">Pages</a></li>
+              
+              
+                <li><a href="/about">About Me</a></li>
+              
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+
+<div class="page-header">
+  <h1>Oracle and ActiveRecord on Linux </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>2012-04-04</strong>
+    </div>
+    <div class="content">
+      <p>So, I&#39;ve been playing with <a href="http://vagrantup.com/" title="Vagrant">Vagrant</a> over the last day or so in the hope that we can use it to speed up the time it takes to get new starters up and running and also to speed up our cucumber test suite for the windows users among our team.</p>
+
+<p>I am hoping that we will be able to spin up a light weight Linux distro with Ruby installed, allowing team members to run their features from there. This means we will no longer need to muck around installing Ruby on Windows (which is a pain) and hopefully it runs faster than it does on Windows.</p>
+
+<p>In setting up this Vagrant box I came across the same issue that I did when setting cucumber up for our project on my Mac. Oracle causes issues with ActiveRecord. So, I thought I&#39;d record, here, the way I fixed this once and for all so I don&#39;t need to go searching the net for it again.</p>
+
+<p>So, starting out with a vanilla install of Ubuntu Lucid Lynx with only <code>rbenv</code> and <code>ruby</code> installed, I did the following:</p>
+
+<ul>
+<li><p>Download <code>instantclient-basic-linux-11.2.0.3.0.zip</code> and <code>instantclient-sdk-linux-11.2.0.3.0.zip</code> and copy them to the Vagrant project directory.</p></li>
+<li><p>Run the following commands:</p></li>
+</ul>
+
+<pre><code class="bash">digital-alley:tmpdir aaron$ vagrant up
+digital-alley:tmpdir aaron$ vagrant ssh
+
+vagrant@lucid32:~$ sudo apt-get install unzip
+vagrant@lucid32:~$ sudo apt-get install rpm
+vagrant@lucid32:~$ cd /tmp
+vagrant@lucid32:~$ cp /vagrant/instantclient-* .
+vagrant@lucid32:~$ cd /opt
+vagrant@lucid32:~$ sudo mkdir oracle
+vagrant@lucid32:~$ cd oracle
+vagrant@lucid32:~$ sudo unzip /tmp/instantclient-basic-linux-11.2.0.3.0.zip
+vagrant@lucid32:~$ sudo unzip /tmp/instantclient-sdk-linux-11.2.0.3.0.zip
+vagrant@lucid32:~$ cd instantclient_11_2
+vagrant@lucid32:~$ sudo ln -s libclntsh.so.11.1 libclntsh.so
+vagrant@lucid32:~$ LD_LIBRARY_PATH=/opt/oracle/instantclient_11_2
+vagrant@lucid32:~$ export LD_LIBRARY_PATH
+vagrant@lucid32:~$ cd /vagrant
+vagrant@lucid32:~$ gem install ruby-oci8
+vagrant@lucid32:~$ sudo apt-get install libaio-dev
+</code></pre>
+
+<ul>
+<li>To test that this all worked, run the following:</li>
+</ul>
+
+<pre><code class="bash">vagrant@lucid32:~$ irb
+
+irb(main):001:0&gt; require &#39;rubygems&#39;
+irb(main):001:0&gt; require &#39;oci8&#39;
+</code></pre>
+
+<p>And there you have it!</p>
+
+<p>PS, A couple of props to the sites that helped me achieve this solution:</p>
+
+<p><a href="http://www.darianshimy.com/2011/09/ruby-oci8-library-problems/">http://www.darianshimy.com/2011/09/ruby-oci8-library-problems</a><br>
+<a href="http://ruby-oci8.rubyforge.org/en/InstallForInstantClient.html">http://ruby-oci8.rubyforge.org/en/InstallForInstantClient.html</a></p>
+
+    </div>
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+    </ul>
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+    </ul>
+    <hr>
+    <div class="pagination">
+      <ul>
+          <li class="prev"><a href="/posts/crunch-api-my-feedback-suggestions-and-opinions" title="Crunch API - My feedback, suggestions and opinions">&larr; Previous</a></li>
+
+          <li><a href="/archive">Archive</a></li>
+
+          <li class="next disabled"><a>Next &rarr;</a>
+      </ul>
+    </div>
+    <hr>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <hr>
+      <div class="footer">
+        <p>&copy; Aaron Chambers 2013
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Google Prettify -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+<script>
+  var pres = document.getElementsByTagName("pre");
+  for (var i=0; i < pres.length; ++i) {
+    pres[i].className = "prettyprint linenums";
+  }
+  prettyPrint();
+</script>
+<!-- end Google Prettify -->
+
+    
+    
+  </body>
+</html>

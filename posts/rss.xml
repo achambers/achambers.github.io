@@ -1,0 +1,381 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>Aaron's Blog</title>
+    <link>http://achambers.github.io</link>
+    <pubDate>2013-06-08 10:44:22 +0100</pubDate>
+    <item>
+      <title>Oracle and ActiveRecord on Linux</title>
+      <link>http://achambers.github.io/posts/oracle-and-activerecord-on-linux</link>
+      <pubDate>2012-04-04</pubDate>
+      <description>&lt;p&gt;So, I&amp;#39;ve been playing with &lt;a href="http://vagrantup.com/" title="Vagrant"&gt;Vagrant&lt;/a&gt; over the last day or so in the hope that we can use it to speed up the time it takes to get new starters up and running and also to speed up our cucumber test suite for the windows users among our team.&lt;/p&gt;
+
+&lt;p&gt;I am hoping that we will be able to spin up a light weight Linux distro with Ruby installed, allowing team members to run their features from there. This means we will no longer need to muck around installing Ruby on Windows (which is a pain) and hopefully it runs faster than it does on Windows.&lt;/p&gt;
+
+&lt;p&gt;In setting up this Vagrant box I came across the same issue that I did when setting cucumber up for our project on my Mac. Oracle causes issues with ActiveRecord. So, I thought I&amp;#39;d record, here, the way I fixed this once and for all so I don&amp;#39;t need to go searching the net for it again.&lt;/p&gt;
+
+&lt;p&gt;So, starting out with a vanilla install of Ubuntu Lucid Lynx with only &lt;code&gt;rbenv&lt;/code&gt; and &lt;code&gt;ruby&lt;/code&gt; installed, I did the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Download &lt;code&gt;instantclient-basic-linux-11.2.0.3.0.zip&lt;/code&gt; and &lt;code&gt;instantclient-sdk-linux-11.2.0.3.0.zip&lt;/code&gt; and copy them to the Vagrant project directory.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Run the following commands:&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;digital-alley:tmpdir aaron$ vagrant up
+digital-alley:tmpdir aaron$ vagrant ssh
+
+vagrant@lucid32:~$ sudo apt-get install unzip
+vagrant@lucid32:~$ sudo apt-get install rpm
+vagrant@lucid32:~$ cd /tmp
+vagrant@lucid32:~$ cp /vagrant/instantclient-* .
+vagrant@lucid32:~$ cd /opt
+vagrant@lucid32:~$ sudo mkdir oracle
+vagrant@lucid32:~$ cd oracle
+vagrant@lucid32:~$ sudo unzip /tmp/instantclient-basic-linux-11.2.0.3.0.zip
+vagrant@lucid32:~$ sudo unzip /tmp/instantclient-sdk-linux-11.2.0.3.0.zip
+vagrant@lucid32:~$ cd instantclient_11_2
+vagrant@lucid32:~$ sudo ln -s libclntsh.so.11.1 libclntsh.so
+vagrant@lucid32:~$ LD_LIBRARY_PATH=/opt/oracle/instantclient_11_2
+vagrant@lucid32:~$ export LD_LIBRARY_PATH
+vagrant@lucid32:~$ cd /vagrant
+vagrant@lucid32:~$ gem install ruby-oci8
+vagrant@lucid32:~$ sudo apt-get install libaio-dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To test that this all worked, run the following:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;vagrant@lucid32:~$ irb
+
+irb(main):001:0&amp;gt; require &amp;#39;rubygems&amp;#39;
+irb(main):001:0&amp;gt; require &amp;#39;oci8&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And there you have it!&lt;/p&gt;
+
+&lt;p&gt;PS, A couple of props to the sites that helped me achieve this solution:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.darianshimy.com/2011/09/ruby-oci8-library-problems/"&gt;http://www.darianshimy.com/2011/09/ruby-oci8-library-problems&lt;/a&gt;&lt;br&gt;
+&lt;a href="http://ruby-oci8.rubyforge.org/en/InstallForInstantClient.html"&gt;http://ruby-oci8.rubyforge.org/en/InstallForInstantClient.html&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Crunch API - My feedback, suggestions and opinions</title>
+      <link>http://achambers.github.io/posts/crunch-api-my-feedback-suggestions-and-opinions</link>
+      <pubDate>2012-01-11</pubDate>
+      <description>&lt;p&gt;Hey Crunch Team, just had a bit of a squiz over &lt;a href="http://support.crunch.co.uk/attachments/token/t6tkagiuvv95esz/?name=Crunch_API.pdf" title="Crunch API Documentation"&gt;your new your API&lt;/a&gt; and wanted to put forward some feedback, suggestions and a few opinions.&lt;/p&gt;
+
+&lt;p&gt;Now, everything following this is based on my understanding of the REST spec, my beliefs of how a RESTful API should be designed and any opinions I have along the way.&lt;/p&gt;
+
+&lt;p&gt;I basically skipped over the OAuth stuff and on to the endpoints which is what interests me the most, so let&amp;#39;s get started.&lt;/p&gt;
+
+&lt;h3 id="toc_0"&gt;Naming&lt;/h3&gt;
+
+&lt;p&gt;The way I look at a RESTful resource URI is similar to how I look at a folder structure on a file system. On my filesystem, in my &lt;code&gt;suppliers&lt;/code&gt; folder, I might have a list of suppliers listed by &lt;code&gt;id&lt;/code&gt;. Inside each &lt;code&gt;id&lt;/code&gt; folder I have any folders and data that correspond to the specific supplier.&lt;/p&gt;
+
+&lt;p&gt;So, if we take a look at your services to get a list of suppliers and expenses...&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/suppliers&lt;br&gt;
+/rest/api/expenses&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;...things look pretty good. To get a list of my suppliers, I look in my &lt;code&gt;suppliers&lt;/code&gt; folder. Likewise, for my expenses, I look in my &lt;code&gt;expenses&lt;/code&gt; folder. So far so good.&lt;/p&gt;
+
+&lt;p&gt;However, now let&amp;#39;s take a look at the services behind GETting a specific supplier or expense:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/supplier/{id}&lt;br&gt;
+/rest/api/expense/{id}&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is where I think things start to fall down a little. What you have done here is tell me that there is a folder, or resource if you will, called supplier, at the same level as the suppliers/expenses folder. And you are also telling me that I will find the supplier/expense for a specific ID in this folder.&lt;/p&gt;
+
+&lt;p&gt;What I would actually expect to find is a specific supplier underneath the &lt;code&gt;suppliers&lt;/code&gt; folder on my filesystem...wouldn&amp;#39;t I? Maybe something like this is more appropriate:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;rest/api/supplier&lt;strong&gt;s&lt;/strong&gt;/{id}&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Notice the &lt;code&gt;s&lt;/code&gt;? It is a very small point, and it&amp;#39;s all semantics, however, I still think it&amp;#39;s important. The supplier I want is in the list of suppliers that lives inside the &lt;code&gt;suppliers&lt;/code&gt; folder.&lt;/p&gt;
+
+&lt;p&gt;Next up, lets have a quick look at:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/expense/expenseTypes&lt;br&gt;
+/rest/api/expense/paymentMethods&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Once again, if we follow the folder theme, it doesn&amp;#39;t, in my mind, make sense that I would look in the expense folder to find a list of possible expenseTypes or paymentMethods. To me, I would have my &lt;code&gt;expenses&lt;/code&gt; folder which contained my list of expenses and then when I wanted to find the possible list of expenseTypes, I&amp;#39;d probably find that in it&amp;#39;s own folder at the top level like so:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/expense_types&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Likewise, I&amp;#39;d probably do the same thing with payment methods:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/payment_methods&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The reason behind this is they are, in a way, top level resources. They don&amp;#39;t live as subordinates of an expense, or anything else really.&lt;/p&gt;
+
+&lt;p&gt;Now on to accounts. Let&amp;#39;s have a look at your current URI&amp;#39;s:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/accounts/allAccounts&lt;br&gt;
+/rest/api/accounts/bankAccounts&lt;br&gt;
+/rest/api/accounts/creditCards&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Thinking back to the folder analogy, on my filesystem, I don&amp;#39;t think I&amp;#39;d arrange my accounts in &lt;code&gt;allAccounts&lt;/code&gt;, &lt;code&gt;bankAccounts&lt;/code&gt; and &lt;code&gt;creditCards&lt;/code&gt; folders underneath an &lt;code&gt;accounts&lt;/code&gt; folder. That doesn&amp;#39;t really make sense to me. In my mind it would make more sense to have all my accounts sitting inside the &lt;code&gt;accounts&lt;/code&gt; folder and each account would have a type. So when I want to get a list of all my accounts I&amp;#39;d probably go to:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/accounts&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;If I wanted only accounts that were bank accounts, I&amp;#39;d probably look for accounts, in the &lt;code&gt;accounts&lt;/code&gt; folder that have a type &lt;code&gt;bankAccount&lt;/code&gt; like so:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/accounts?type=bank_account&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Likewise, I&amp;#39;d do something similar if I wanted credit card accounts:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/accounts?type=credit_card&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;As for the payload that is returned, I&amp;#39;d probably then expect something like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="xml"&gt;&amp;lt;accounts&amp;gt;
+  &amp;lt;account  accountId=&amp;quot;1&amp;quot; type=&amp;quot;bank_account&amp;quot;&amp;gt;Bank Account 1&amp;lt;/account&amp;gt;
+  &amp;lt;account  accountId=&amp;quot;2&amp;quot; type=&amp;quot;bank_account&amp;quot;&amp;gt;Bank Account 2&amp;lt;/account&amp;gt; 
+&amp;lt;/accounts&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="xml"&gt;&amp;lt;accounts&amp;gt;
+  &amp;lt;account  accountId=&amp;quot;3&amp;quot; type=&amp;quot;credit_card&amp;quot;&amp;gt;Credit Card 1&amp;lt;/account&amp;gt;
+  &amp;lt;account  accountId=&amp;quot;4&amp;quot; type=&amp;quot;credit_card&amp;quot;&amp;gt;Credit Card 2&amp;lt;/account&amp;gt; 
+&amp;lt;/accounts&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This then allows you to return all accounts to me with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="xml"&gt;&amp;lt;accounts&amp;gt;
+  &amp;lt;account  accountId=&amp;quot;1&amp;quot; type=&amp;quot;bank_account&amp;quot;&amp;gt;Bank Account 1&amp;lt;/account&amp;gt;
+  &amp;lt;account  accountId=&amp;quot;2&amp;quot; type=&amp;quot;bank_account&amp;quot;&amp;gt;Bank Account 2&amp;lt;/account&amp;gt;
+  &amp;lt;account  accountId=&amp;quot;3&amp;quot; type=&amp;quot;credit_card&amp;quot;&amp;gt;Credit Card 1&amp;lt;/account&amp;gt;
+  &amp;lt;account  accountId=&amp;quot;4&amp;quot; type=&amp;quot;credit_card&amp;quot;&amp;gt;Credit Card 2&amp;lt;/account&amp;gt; 
+&amp;lt;/accounts&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Again, these are pretty small semantic changes but I think they make for a much more readable, logical and understandable API. Obviously I don&amp;#39;t know your data model or how these accounts relate to each other but this makes sense to me from the perspective of a consumer of your service. &lt;/p&gt;
+
+&lt;h3 id="toc_1"&gt;PUT vs POST&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;PUT&lt;/code&gt; vs &lt;code&gt;POST&lt;/code&gt; is something that confuses pretty much everyone I talk to when they first start learning about REST. And the fact is that there is nothing stopping a developer from implementing &lt;code&gt;PUT&lt;/code&gt; and &lt;code&gt;POST&lt;/code&gt; methods for their services incorrectly.&lt;/p&gt;
+
+&lt;p&gt;First let&amp;#39;s look at the specification for &lt;code&gt;PUT&lt;/code&gt; vs &lt;code&gt;POST&lt;/code&gt; as per the &lt;a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html" title="Hypertext Transfer Protocol -- HTTP/1.1 Spec"&gt;w3.org website&lt;/a&gt;. &lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The POST method is used to request that the origin server accept the entity enclosed in the request
+as a new subordinate of the resource identified by the Request-URI...&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;What this essentially means is that when you &lt;code&gt;POST&lt;/code&gt; an entity to a particular URI, the server should create a new object underneath the requested resource URI, or inside the folder requested. And the response should return the location of the newly created resource. So, as an example, when I &lt;code&gt;POST&lt;/code&gt; an entity to:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/expenses&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The server should create a new expense underneath the &lt;code&gt;expenses&lt;/code&gt; resource, or folder, and return me the resource location for it, for example:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/expenses/1&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;If I were to &lt;code&gt;POST&lt;/code&gt; the exact same entity to the exact same resource, a new entity would be created and the location for that would be returned, ie:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/expenses/2&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is what is meant by the fact that the &lt;code&gt;POST&lt;/code&gt; method is not idempotent. Each time you call the method, even with the same payload, a new resource is created on the server. And when thinking of the &lt;code&gt;POST&lt;/code&gt; method like this, the naming of your GET methods, like I proposed, for specific expenses and accounts starts to make sense.&lt;/p&gt;
+
+&lt;p&gt;And now lets look at &lt;code&gt;PUT&lt;/code&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The PUT method requests that the enclosed entity be stored under the supplied Request-URI.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;What this essentially means is that when you &lt;code&gt;PUT&lt;/code&gt; an entity to a particular URI, the server stores that entity at the specified URI. So if I wanted to create a new expense with a specific ID, or I wanted to update an existing expense for which I know the ID, I would &lt;code&gt;PUT&lt;/code&gt; it to, for example:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/expenses/2&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;code&gt;PUT&lt;/code&gt; is idempotent meaning that I can &lt;code&gt;PUT&lt;/code&gt; to that URI all day and there will be no change to the server state for each subsequent call after the first. I will essentially be saving the same expense over itself for each subsequent call.&lt;/p&gt;
+
+&lt;p&gt;Taking all this in to account, I want to put it out there that I think your API for adding an expense and a supplier is slightly wrong. At the moment you are allowing a user to &lt;code&gt;PUT&lt;/code&gt; to:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/supplier&lt;br&gt;
+/rest/api/expense&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;According to the REST spec, this would create the entity at that actual resource URI. Instead, you should, technically, only be able to &lt;code&gt;POST&lt;/code&gt; to that URI. If you want to support &lt;code&gt;PUT&lt;/code&gt;, that should really be to:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;/rest/api/suppliers/{id}&lt;br&gt;
+/rest/api/expenses/{id}&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This would essentially be allowing a user to update a particular supplier or expense for the ID specified.&lt;/p&gt;
+
+&lt;h3 id="toc_2"&gt;Casing of URIs&lt;/h3&gt;
+
+&lt;p&gt;Casing of URI&amp;#39;s comes down to personal preference, however, it is important to note that URI&amp;#39;s are case sensitive. Therefore, it might be worth thinking about lower casing your URI&amp;#39;s (as I sort of snuck in in the section about expenseTypes and paymentMethods) as it stops the user having to think about whether or not a particular resource URI contains upper case characters or not. If you stick soley to lower case, then there won&amp;#39;t be any problems with that. Again, this is down to personal preference, so what you go with is up to you.&lt;/p&gt;
+
+&lt;h3 id="toc_3"&gt;Typo&lt;/h3&gt;
+
+&lt;p&gt;A small cut and paste error, I&amp;#39;m sure, but under the &lt;strong&gt;Add Expense&lt;/strong&gt; section you refer to the &lt;strong&gt;Add Supplier service&lt;/strong&gt;. Might want to fix that up ;)&lt;/p&gt;
+
+&lt;h3 id="toc_4"&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;Just to re-iterate, the feedback and suggestions I have for you as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Look at your naming of URI&amp;#39;s. Think of them like a folder structure on the filesystem.&lt;/li&gt;
+&lt;li&gt;Understand PUT vs POST and ensure that you implement them correctly.&lt;/li&gt;
+&lt;li&gt;Thinking about casing of URI&amp;#39;s&lt;/li&gt;
+&lt;li&gt;Fix the typo&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Woah, looking back now, this post became way longer than I had imagined it would be. I hope I haven&amp;#39;t ranted too much. As I mentioned at the beginning, all the things I raised are things that sprung to mind while reading your API doc that maybe I would have done differently if I were designing the services. Take them all with a pinch of salt but please have a think about them. In particular the &lt;code&gt;PUT&lt;/code&gt; vs &lt;code&gt;POST&lt;/code&gt; one. Along with that, it&amp;#39;s true, I am only human and therefore I am only speaking based on my experiences as a developer. I have been known to be wrong more times than I could ever remember and there is every chance that I have been wrong in some points above, however, if I can do nothing more than open up some discussion and give you something to think about then I&amp;#39;m happy.&lt;/p&gt;
+
+&lt;p&gt;Good work on what you have done with the API and the Crunch app. I have nothing but great things to say about your work and your company so keep up the awesomeness.&lt;/p&gt;
+
+&lt;p&gt;Oh, and by the way, Helena is a freaking awesome account manager.&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Include vs Extend. What's the difference?</title>
+      <link>http://achambers.github.io/posts/include-vs-extend-whats-the-difference</link>
+      <pubDate>2011-08-26</pubDate>
+      <description>&lt;p&gt;So, I was wondering the other day what the hell the difference between &lt;code&gt;include&lt;/code&gt; and &lt;code&gt;extend&lt;/code&gt; in Ruby are and which one you&amp;#39;d want to use under what circumstances. After a bit of digging around on the net and playing with some code, it turns out that the answer is really quite simple. I&amp;#39;m sure for all Ruby experts this is a no brainer but since I am early on in my &lt;a href="enlighten-yourself-with-ruby-koans" title="Ruby Koans"&gt;path to enlightenment&lt;/a&gt;, I wanted to document it so I can cement the concept in my mind. &lt;/p&gt;
+
+&lt;p&gt;Firstly, simply put, both include and extend are Ruby&amp;#39;s keywords to allow a class to inherit methods from a module. The difference between the two is thus:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;include&lt;/code&gt; allows you to inherit methods as Instance Methods.&lt;br&gt;
+&lt;code&gt;extend&lt;/code&gt; allows you to inherit methods as Class Methods. &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;And the way I&amp;#39;ve been remembering this is that &lt;strong&gt;IN&lt;/strong&gt;clude adds &lt;strong&gt;IN&lt;/strong&gt;stance methods.&lt;/p&gt;
+
+&lt;p&gt;This is not unlike Java&amp;#39;s &lt;code&gt;extends&lt;/code&gt; keyword, however, the idea of include/extend in Ruby I find is slightly different. In Java, to extend something means that the extending class IS-A subclass of the super class. In Ruby this doesn&amp;#39;t seem to be the way to think about it. It would seem that to include/extend a module in Ruby simply means that the including class wants to take on the methods of the Module. It can be totally unrelated in terms of an object hierarchy.&lt;/p&gt;
+
+&lt;p&gt;Anyway, let&amp;#39;s have a little look at some code to explain the difference between include and extend.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;module Tweet
+  def save
+    puts &amp;#39;Tweet saved&amp;#39;
+  end
+end
+
+class Foo
+  include Tweet # Add methods from Tweet as Instances Methods
+end
+
+class Bar
+  extend Tweet # Add methods from Tweet as Class Methods
+end
+Foo.save # =&amp;gt; undefined method `save&amp;#39; for Foo:Class (NoMethodError)
+Foo.new.save # =&amp;gt; Tweet saved
+Bar.save # =&amp;gt; Tweet saved
+Bar.new.save # =&amp;gt; undefined method `save&amp;#39; for #&amp;lt;Bar:0x007f813104e0e8&amp;gt; (NoMethodError)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A small shout out to &lt;a href="http://railstips.org/blog/archives/2009/05/15/include-vs-extend-in-ruby/" title="Rails Tips"&gt;John Nunemaker&lt;/a&gt; who&amp;#39;s post I found that explain&amp;#39;s this concept nicely.&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Is the water safe to drink?</title>
+      <link>http://achambers.github.io/posts/is-the-water-safe-to-drink</link>
+      <pubDate>2011-08-16</pubDate>
+      <description>&lt;p&gt;Introducing my latest Ruby project I&amp;#39;ve been working on in parallel with CoffeeSnobs:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://safewater.heroku.com/" title="Is the water safe to drink?"&gt;Is the water safe to drink?&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;ITWSTD is built in Ruby using Sinatra, Haml and DataMapper. I am using IndexTank for full text indexing/search and it is deployed on Heroku.&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;ve been working on this with a couple of friends from &lt;a href="www.laurenbugeja.com" title="www.laurenbugeja.com"&gt;www.laurenbugeja.com&lt;/a&gt; who&amp;#39;s initial idea this was, and who has been doing the UX design.&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s been a fun little project and hopefully it will help anyone who is travelling in a far away country where brushing your teeth with the local water could mean the difference between fun memories and 10 days on the toilet.&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Evolution Recruitment Agency - Can I trust them?</title>
+      <link>http://achambers.github.io/posts/evolution-recruitment-agency-can-i-trust-them</link>
+      <pubDate>2011-08-12</pubDate>
+      <description>&lt;p&gt;So I got a call from a recruiter this morning. The call started off as normal. &amp;quot;&lt;strong&gt;Hi, this is David Dowdall blah blah blah. I have some roles in the Finance industry I think you&amp;#39;ll be interested in blah blah blah&lt;/strong&gt;&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;So, I stopped David there to tell him that I&amp;#39;m not interested in the finance industry and this is where it started to turn a bit strange. And by that I mean I started to get a feeling that David was taking me for a fool.&lt;/p&gt;
+
+&lt;p&gt;David started banging on about something along the lines of needing to confirm some details with me for secuirty reasons. Security reasons?  Do you have a top secret role for me in the NSA?  He needed to confirm my name and last 2 places of work, and really needed my line manager&amp;#39;s name and contact details as references so that my CV would look credible and the client would look favourably on my application.&lt;/p&gt;
+
+&lt;p&gt;Now HOLD ON THERE David. What client?  What application?  You haven&amp;#39;t even mentioned any role to me and I sure has hell haven&amp;#39;t asked you to put me forward for it.&lt;/p&gt;
+
+&lt;p&gt;He went on to ask for details on the interviews that I have coming up. And of course that was for my benefit as well so that he wouldn&amp;#39;t put me forward for any of the same companies. Again, HOLD YOUR HORSES David. There won&amp;#39;t be any problem of that happening either because you won&amp;#39;t be putting me forward for anything without me giving you permission first.&lt;/p&gt;
+
+&lt;p&gt;So, after our conversation where David was obviously digging for leads and obviously had no roles for me, I received an email from him. It went as follows:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Hi Aaron,
+&lt;br/&gt;&lt;br/&gt;
+Many thanks for your time. 
+Please click here to enter your references from your most recent employers. It would be good, where possible, to show them to
+companies that are interested in you. This will really help you get the position you want as it creates credibility with your
+application.
+&lt;br/&gt;&lt;br/&gt;
+Ideally the references you give will be/have been, your direct line manager at the company. Include your current/most recent
+employer; however they will not be approached without your prior written permission.
+&lt;br/&gt;&lt;br/&gt;
+In addition, in reply to this email, it is important that you keep me updated with any details of where you have sent your CV
+and where you have been/are going for interview. This includes company applied for, location, role applied for and manager&amp;#39;s
+name if possible.
+&lt;br/&gt;&lt;br/&gt;
+This is so that any applications I make on your behalf will not damage any pre-existing applications, this will save wasting
+your time and help me work faster.
+&lt;br/&gt;&lt;br/&gt;
+Finally, please keep me up to date with your employment situation i.e. interviews or job offers as it would be unfair to put
+you forward to anyone should your situation change.
+&lt;br/&gt;&lt;br/&gt;
+Speak to you soon,
+&lt;br/&gt;&lt;br/&gt;
+David Dowdall&lt;br&gt;
+Senior Recruitment Consultant&lt;br&gt;
+Evolution Recruitment Solutions Ltd  &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So not only do I need to go to a page on their website and input the contact details of two of my references, before even having a role to interview for but I need to keep David updated with where I send my CV, where I have been and am going for interviews including the company and interviewing manager&amp;#39;s name.&lt;/p&gt;
+
+&lt;p&gt;And I need to do all of this for &lt;strong&gt;MY&lt;/strong&gt; benefit apparently. Sounds so fishy it isn&amp;#39;t funny.&lt;/p&gt;
+
+&lt;p&gt;Funnily enough I had a read through this &lt;a href="http://www.contractoruk.com/agencies/agency_tricks_on_it_contractors_still_common.html" title="Contractor UK"&gt;link&lt;/a&gt; on Contractor UK and it describes a few tactics very similar to what David displayed in his interactions with me today. &lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;ve got to say, this is the first time I have had this sort of contact from a recruiter and the first time that I hung up the phone feeling like the recruiter was blatantly trying to dupe me.&lt;/p&gt;
+
+&lt;p&gt;Maybe I have all this wrong and please correct me if I do, but I won&amp;#39;t be giving any information to David or Evolution Recruitment now or in the future.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;UPDATE&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A quick search turned up this &lt;a href="http://uk.linkedin.com/in/daviddowdalljava" title="David Dowdall LinkedIn"&gt;LinkedIn&lt;/a&gt; profile which one would assume belongs to the same David that was in contact with me. From that page, it looks like David has only been working at Evolution Recruitment for a month, or less. So David, you&amp;#39;re new to the position and need to build up some leads. Fair enough. But don&amp;#39;t take me as a fool mate.&lt;/p&gt;
+</description>
+    </item>
+  </channel>
+</rss>
