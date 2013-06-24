@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <rss version="2.0">
   <channel>
-    <title>Aaron's Blog</title>
-    <link>http://achambers.github.io</link>
-    <pubDate>2013-06-22 10:54:11 +0100</pubDate>
+    <title>aaron.is { happy unless hungry }</title>
+    <link>http://blog.happyunlesshungry.com</link>
+    <pubDate>2013-06-24 22:32:08 +0100</pubDate>
     <item>
       <title>Oracle and ActiveRecord on Linux</title>
-      <link>http://achambers.github.io/posts/oracle-and-activerecord-on-linux</link>
+      <link>http://blog.happyunlesshungry.com/posts/oracle-and-activerecord-on-linux</link>
       <pubDate>2012-04-04</pubDate>
       <description>&lt;p&gt;So, I&amp;#39;ve been playing with &lt;a href="http://vagrantup.com/" title="Vagrant"&gt;Vagrant&lt;/a&gt; over the last day or so in the hope that we can use it to speed up the time it takes to get new starters up and running and also to speed up our cucumber test suite for the windows users among our team.&lt;/p&gt;
 
@@ -62,7 +62,7 @@ irb(main):001:0&amp;gt; require &amp;#39;oci8&amp;#39;
     </item>
     <item>
       <title>Crunch API - My feedback, suggestions and opinions</title>
-      <link>http://achambers.github.io/posts/crunch-api-my-feedback-suggestions-and-opinions</link>
+      <link>http://blog.happyunlesshungry.com/posts/crunch-api-my-feedback-suggestions-and-opinions</link>
       <pubDate>2012-01-11</pubDate>
       <description>&lt;p&gt;Hey Crunch Team, just had a bit of a squiz over &lt;a href="http://support.crunch.co.uk/attachments/token/t6tkagiuvv95esz/?name=Crunch_API.pdf" title="Crunch API Documentation"&gt;your new your API&lt;/a&gt; and wanted to put forward some feedback, suggestions and a few opinions.&lt;/p&gt;
 
@@ -264,7 +264,7 @@ as a new subordinate of the resource identified by the Request-URI...&lt;/p&gt;
     </item>
     <item>
       <title>Include vs Extend. What's the difference?</title>
-      <link>http://achambers.github.io/posts/include-vs-extend-whats-the-difference</link>
+      <link>http://blog.happyunlesshungry.com/posts/include-vs-extend-whats-the-difference</link>
       <pubDate>2011-08-26</pubDate>
       <description>&lt;p&gt;So, I was wondering the other day what the hell the difference between &lt;code&gt;include&lt;/code&gt; and &lt;code&gt;extend&lt;/code&gt; in Ruby are and which one you&amp;#39;d want to use under what circumstances. After a bit of digging around on the net and playing with some code, it turns out that the answer is really quite simple. I&amp;#39;m sure for all Ruby experts this is a no brainer but since I am early on in my &lt;a href="enlighten-yourself-with-ruby-koans" title="Ruby Koans"&gt;path to enlightenment&lt;/a&gt;, I wanted to document it so I can cement the concept in my mind. &lt;/p&gt;
 
@@ -305,7 +305,7 @@ Bar.new.save # =&amp;gt; undefined method `save&amp;#39; for #&amp;lt;Bar:0x007f
     </item>
     <item>
       <title>Is the water safe to drink?</title>
-      <link>http://achambers.github.io/posts/is-the-water-safe-to-drink</link>
+      <link>http://blog.happyunlesshungry.com/posts/is-the-water-safe-to-drink</link>
       <pubDate>2011-08-16</pubDate>
       <description>&lt;p&gt;Introducing my latest Ruby project I&amp;#39;ve been working on in parallel with CoffeeSnobs:&lt;/p&gt;
 
@@ -320,7 +320,7 @@ Bar.new.save # =&amp;gt; undefined method `save&amp;#39; for #&amp;lt;Bar:0x007f
     </item>
     <item>
       <title>Evolution Recruitment Agency - Can I trust them?</title>
-      <link>http://achambers.github.io/posts/evolution-recruitment-agency-can-i-trust-them</link>
+      <link>http://blog.happyunlesshungry.com/posts/evolution-recruitment-agency-can-i-trust-them</link>
       <pubDate>2011-08-12</pubDate>
       <description>&lt;p&gt;So I got a call from a recruiter this morning. The call started off as normal. &amp;quot;&lt;strong&gt;Hi, this is David Dowdall blah blah blah. I have some roles in the Finance industry I think you&amp;#39;ll be interested in blah blah blah&lt;/strong&gt;&amp;quot;.&lt;/p&gt;
 
