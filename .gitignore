@@ -1,3 +1,4 @@
 compiled
 .ruby-version
 .ruby-gemset
+*.swp
