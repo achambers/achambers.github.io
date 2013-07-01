@@ -2,7 +2,7 @@
 title: Crunch API - My feedback, suggestions and opinions
 date: '2012-01-11'
 description:
-tags: []
+tags: [Crunch Api]
 ---
 
 Hey Crunch Team, just had a bit of a squiz over [your new your API][1] and wanted to put forward some feedback, suggestions and a few opinions.

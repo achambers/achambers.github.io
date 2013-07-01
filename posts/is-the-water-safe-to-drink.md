@@ -2,7 +2,7 @@
 title: Is the water safe to drink?
 date: '2011-08-16'
 description:
-tags: []
+tags: [Personal Projects, "Is the water safe to drink?"]
 ---
 
 Introducing my latest Ruby project I've been working on in parallel with CoffeeSnobs:

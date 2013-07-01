@@ -2,7 +2,7 @@
 title: "WELD - ClassFormatError: Illegal class name"
 date: '2011-07-15'
 description:
-tags: []
+tags: [CDI, Java]
 ---
 
 It's been a few weeks since I've committed any code to CoffeeSnobs. I have been spending my time working on the design, look and feel mostly, as well as working on another project.

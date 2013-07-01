@@ -2,7 +2,7 @@
 title: Let's set the scene
 date: '2011-01-26'
 description:
-tags: []
+tags: [Personal Projects]
 ---
 
 So, [Liquid Armour][1] and I are are working on a little web/mobile app that we think is much needed in and around London at the current time. I don't want to reveal too much about the app itself at this stage but I thought this a great place to record issues, fixes, lessons and ideas that we come across throughout the course of this little project. I feel that it might be nice to record the journey from a concept to a realized web application out in the wild. Only future me knows where this will end up, but at least, by the time we get there, we should have a pretty decent tome describing the trials and tribulations that got us there.

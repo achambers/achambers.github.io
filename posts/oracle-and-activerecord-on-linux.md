@@ -2,7 +2,7 @@
 title: Oracle and ActiveRecord on Linux
 date: '2012-04-04'
 description:
-tags: []
+tags: [Ruby, Vagrant, Oracle, Activerecord]
 ---
 
 So, I've been playing with [Vagrant][1] over the last day or so in the hope that we can use it to speed up the time it takes to get new starters up and running and also to speed up our cucumber test suite for the windows users among our team.

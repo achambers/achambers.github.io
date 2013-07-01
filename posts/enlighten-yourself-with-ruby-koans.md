@@ -2,7 +2,7 @@
 title: Enlighten yourself with Ruby Koans
 date: '2011-08-05'
 description:
-tags: []
+tags: [Ruby, Ruby Koans, Learning]
 ---
 
 A wise man once said "Java will enrage, Ruby will enlighten". I've been on the path of "enragement" for the past 10 years or so but a few months ago I found the start of the path to elightenment. And it is called [Ruby Koans][1].

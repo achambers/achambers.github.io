@@ -2,7 +2,7 @@
 title: Dood, where's my transaction?
 date: '2011-01-27'
 description:
-tags: []
+tags: [Seam 3, Java, CDI]
 ---
 
 Seam 3 has been written in a very modularized way. It is basically CDI at it's core with a bunch of modules that give support for things like Transactions, Facelets, GWT, JBPM that can be tacked on to CDI as the developer sees fit. This is great as the Seam 2 stack contained all this stuff, a lot of which was not needed all the time. Now, with Seam 3, we can just pick and choose which modules we need.

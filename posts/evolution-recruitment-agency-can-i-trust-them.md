@@ -2,7 +2,7 @@
 title: Evolution Recruitment Agency - Can I trust them?
 date: '2011-08-12'
 description:
-tags: []
+tags: [Recruitment Agents]
 ---
 
 So I got a call from a recruiter this morning. The call started off as normal. "**Hi, this is David Dowdall blah blah blah. I have some roles in the Finance industry I think you'll be interested in blah blah blah**".

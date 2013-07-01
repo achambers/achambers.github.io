@@ -2,7 +2,7 @@
 title: Interview @ Linkdex
 date: '2011-07-12'
 description:
-tags: []
+tags: [Interviews]
 ---
 
 So, I've just finished my last contract and am about to start looking into getting another, so I decided it might be a good idea to blog about the interview processes that I come across and the sorts of questions that I am given. This is mainly for my own record so that I can keep track of the sorts of questions that are being asked and the things I should keep fresh in my mind when going for future interviews, but also for anyone else who might be going for a job at one of these companies. So, without further ado, the latest interview I went for...

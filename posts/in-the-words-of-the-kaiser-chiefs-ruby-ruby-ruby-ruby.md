@@ -2,7 +2,7 @@
 title: In the words of the Kaiser Chiefs - Ruby Ruby Ruby Ruby
 date: '2011-04-19'
 description:
-tags: []
+tags: [Ruby]
 ---
 
 It has to be said, I am the type of person that gets very focussed on a particular subject. When in this focussed mode, I find it very difficult to look outside of my field of vision at other options as I'm so focussed on achieving what is currently set out in front of me. Every now and then though, something will connect with me in the right way, at the right moment, that will allow me to open my eyes a little to a new idea or concept and it will change my thoughts and perception instantly.

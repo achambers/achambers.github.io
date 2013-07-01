@@ -2,7 +2,7 @@
 title: RVM
 date: '2011-05-24'
 description:
-tags: []
+tags: [Ruby, Rvm]
 ---
 
 I had a 'light bulb' moment the other day when I actually understood the value of [RVM][1]. Before then I was using it, but didn't really understand why and what value it was giving me. The reason for this was because I didn't really understand what it does and what it's trying to solve. I am no expert in RVM by any means but this is my understanding of RVM and why and how I use it.

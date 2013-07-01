@@ -2,7 +2,7 @@
 title: Introducing CoffeeSnobs
 date: '2011-03-03'
 description:
-tags: []
+tags: [Personal Projects, Coffeesnobs]
 ---
 
 So, that little project that [Liquid Armour][1] and I have been working on has finally started to see the light of day. The site is called CoffeeSnobs and can be found at [http://coffeesnobs.in/london][2] . It is a work in progress and we'll be constantly improving the site as we go.

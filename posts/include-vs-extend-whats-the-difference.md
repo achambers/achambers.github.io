@@ -3,7 +3,7 @@ title: Include vs Extend. What's the difference?
 date: '2011-08-26'
 description:
 permalink: 'posts/include-vs-extend-whats-the-difference'
-tags: []
+tags: [Ruby]
 ---
 
 So, I was wondering the other day what the hell the difference between `include` and `extend` in Ruby are and which one you'd want to use under what circumstances. After a bit of digging around on the net and playing with some code, it turns out that the answer is really quite simple. I'm sure for all Ruby experts this is a no brainer but since I am early on in my [path to enlightenment][1], I wanted to document it so I can cement the concept in my mind. 

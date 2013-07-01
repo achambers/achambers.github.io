@@ -2,7 +2,7 @@
 title: GIT rid of SVN
 date: '2011-02-02'
 description:
-tags: []
+tags: [Git]
 ---
 
 So, after many years of using SVN, and a few less years of hearing about distributed version control, I decided to try out Git on our new project. It's a bit of trial and error and I'm still learning the differences and nuances between SVN and Git but I've got to say that I'm loving it. Below are a few thoughts about Git and things I'm learning along the way.

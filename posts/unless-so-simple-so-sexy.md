@@ -2,7 +2,7 @@
 title: unless - so simple, so sexy
 date: '2011-07-27'
 description:
-tags: []
+tags: [Ruby]
 ---
 
 So, I'm spending a couple of hours on an unattended test for a contract that I'm thinking of going for and I have to write a bit of Java code that simulates some ATM software. While churning out a couple of methods I had my very first 'Man, this would be so much easier in Ruby' moment and it put a smile on my face to know that this is the first of many more to come. I know the Ruby syntax is a lot less verbose than Java and has a lot of niceties that Java doesn't but it's so nice to be in the real world and just see it in action.
