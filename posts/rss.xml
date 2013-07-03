@@ -3,7 +3,189 @@
   <channel>
     <title>happy unless hungry</title>
     <link>http://blog.happyunlesshungry.com</link>
-    <pubDate>2013-07-01 22:56:54 +0100</pubDate>
+    <pubDate>2013-07-03 23:16:46 +0100</pubDate>
+    <item>
+      <title>My Git Workflow</title>
+      <link>http://blog.happyunlesshungry.com/posts/my-git-workflow</link>
+      <pubDate>2013-06-30</pubDate>
+      <description>&lt;p&gt;What does your git workflow look like?&lt;/p&gt;
+
+&lt;p&gt;Since I started using git about 2 years ago I&amp;#39;ve constantly been trying to 
+improve my git workflow. As I began to form a clearer picture in my mnind of 
+how git stores commits, how branches work, how merging works etc, I slowly refined 
+how I go about committing to my projects. While I&amp;#39;m far from  a git 
+guru, I&amp;#39;m pretty happy with my current workflow so thought I&amp;#39;d share it.  &lt;/p&gt;
+
+&lt;h2 id="toc_0"&gt;A clean slate&lt;/h2&gt;
+
+&lt;p&gt;Firstly, make sure &lt;code&gt;master&lt;/code&gt; is up to date.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;df21be6 Aaron Chambers     o [master] [origin/master] Test commit
+37cedd7 Aaron Chambers     I first commit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="toc_1"&gt;Branch out and commit away&lt;/h2&gt;
+
+&lt;p&gt;Now, create a local branch and commit until your heart&amp;#39;s content.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~/code/my-project (master)$ git checkout -b bug-fix
+Switched to a new branch &amp;#39;bug-fix&amp;#39;
+
+~/code/my-project (bug-fix)$ echo &amp;quot;Fixing bugs&amp;quot; &amp;gt;&amp;gt; README.md
+~/code/my-project (bug-fix)$ git commit -am &amp;quot;Swatting bugs&amp;quot;
+[bug-fix 2e2b000] Swatting bugs
+ 1 file changed, 1 insertion(+)
+
+~/code/my-project (bug-fix)$ echo &amp;quot;Fixing more bugs&amp;quot; &amp;gt;&amp;gt; README.md
+~/code/my-project (bug-fix)$ git commit -am &amp;quot;Getting out the bug spray&amp;quot;
+[bug-fix 9917b19] Getting out the bug spray
+ 1 file changed, 1 insertion(+)
+
+~/code/my-project (bug-fix)$ echo &amp;quot;Fixing yet more bugs&amp;quot; &amp;gt;&amp;gt; README.md
+~/code/my-project (bug-fix)$ git commit -am &amp;quot;And now for the bug zapper&amp;quot;
+[bug-fix 1fdd4c2] And now for the bug zapper
+ 1 file changed, 1 insertion(+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If we have a quick look at the commit tree we can see things look pretty good. 
+My branch commits come directly after the last commit on &lt;code&gt;master&lt;/code&gt; (&lt;code&gt;df21be6&lt;/code&gt;).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;928041a Aaron Chambers     o [bug-fix] And now for the bug zapper
+ed49f8b Aaron Chambers     o Getting out the bug spray
+21dffcd Aaron Chambers     o Swatting bugs
+df21be6 Aaron Chambers     o [master] [origin/master] Test commit
+37cedd7 Aaron Chambers     I first commit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="toc_2"&gt;Pull me oh master&lt;/h2&gt;
+
+&lt;p&gt;Now we need to go back to &lt;code&gt;master&lt;/code&gt; and see if anyone else has committed to it 
+since we last pulled.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~/code/my-project (bug-fix)$ git checkout master
+Switched to branch &amp;#39;master&amp;#39;
+
+~/code/my-project (master)$ git pull
+remote: Counting objects: 8, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 6 (delta 0), reused 6 (delta 0)
+Unpacking objects: 100% (6/6), done.
+From github.com:achambers/test
+   df21be6..deb4a17  master     -&amp;gt; origin/master
+Updating df21be6..deb4a17
+Fast-forward
+ README.md | 2 ++
+ 1 file changed, 2 insertions(+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Well, well, well. It seems someone has been pushing some work to &lt;code&gt;master&lt;/code&gt;. We can 
+see that the commit tree has branched at commit &lt;code&gt;df21be6&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deb4a17 Will Smith         o [master] [origin/master] Made some more awesome
+6597417 Will Smith         o Added awesome features
+928041a Aaron Chambers     &#x2502; o [bug-fix] And now for the bug zapper
+ed49f8b Aaron Chambers     &#x2502; o Getting out the bug spray
+21dffcd Aaron Chambers     &#x2502; o Swatting bugs
+df21be6 Aaron Chambers     I&#x2500;&#x2518; Test commit
+37cedd7 Aaron Chambers     I first commit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I don&amp;#39;t really have a good reason other than a touch of OCD but the whole reason 
+I  use this workflow is because I am not a fan of merge commits. I like to see 
+my commit history looking like a nice straight line. This is partially for 
+asthetic reasons, and partially because I find it easier for my brain to digest 
+when it is a straight line. Either way, I like to take pride in my commit history 
+and I think this workflow does that well.&lt;/p&gt;
+
+&lt;p&gt;Therefore we are trying to AVOID the following.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;fhd65j6 Aaron Chambers     M&#x2500;&#x2510; [master] [origin/master] Merged branch &amp;#39;bug-fix&amp;#39;
+deb4a17 Will Smith         o &#x2502; Made some more awesome
+6597417 Will Smith         o &#x2502; Added awesome features
+928041a Aaron Chambers     &#x2502; o And now for the bug zapper
+ed49f8b Aaron Chambers     &#x2502; o Getting out the bug spray
+21dffcd Aaron Chambers     &#x2502; o Swatting bugs
+df21be6 Aaron Chambers     I&#x2500;&#x2518; Test commit
+37cedd7 Aaron Chambers     I first commit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="toc_3"&gt;All your rebase are belong to us&lt;/h2&gt;
+
+&lt;p&gt;So, in order to get rid of that pesky merge commit, we need to checkout our 
+&lt;code&gt;bug-fix&lt;/code&gt; branch again and rebase it with &lt;code&gt;master&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~/code/my-project (master)$ git checkout bug-fix
+Switched to branch &amp;#39;bug-fix&amp;#39;
+
+~/code/my-project (bug-fix)$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: Swatting bugs
+Applying: Getting out the bug spray
+Applying: And now for the bug zapper
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;#39;s better. That&amp;#39;s what I like to see. Our &lt;code&gt;bug-fix&lt;/code&gt; branch now contains all 
+the commits from &lt;code&gt;master&lt;/code&gt;, and then our commits on top of those. In one sexy 
+straight line. Nice! &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;928041a Aaron Chambers     o [bug-fix] And now for the bug zapper
+ed49f8b Aaron Chambers     o Getting out the bug spray
+21dffcd Aaron Chambers     o Swatting bugs
+deb4a17 Will Smith         o [master] [origin/master] Made some more awesome
+6597417 Will Smith         o Added awesome features
+df21be6 Aaron Chambers     o Test commit
+37cedd7 Aaron Chambers     I first commit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="toc_4"&gt;Wrap it all up&lt;/h2&gt;
+
+&lt;p&gt;Finally, merge the &lt;code&gt;bug-fix&lt;/code&gt; branch into &lt;code&gt;master&lt;/code&gt; and we&amp;#39;re done.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~/code/my-project (bug-fix)$ git checkout master
+Switched to branch &amp;#39;master&amp;#39;
+
+~/code/my-project (master)$ git merge bug-fix
+Updating deb4a17..928041a
+Fast-forward
+ README.md | 3 +++
+ 1 file changed, 3 insertions(+)
+
+~/code/my-project (master)$ git push
+Counting objects: 11, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (9/9), 823 bytes, done.
+Total 9 (delta 0), reused 0 (delta 0)
+To git@github.com:achambers/test.git
+   deb4a17..928041a  master -&amp;gt; master
+
+~/code/my-project (master)$ git branch -d bug-fix
+Deleted branch bug-fix (was 928041a).
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Check out that nice straight line.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2013-06-30 22:54 Aaron Chambers     o [master] [origin/master] And now for the bug zapper
+2013-06-30 22:53 Aaron Chambers     o Getting out the bug spray
+2013-06-30 22:53 Aaron Chambers     o Swatting bugs
+2013-06-30 23:02 Will Smith         o Made some more awesome
+2013-06-30 23:01 Will Smith         o Added awesome features
+2013-06-30 22:49 Aaron Chambers     o Test commit
+2013-06-30 22:47 Aaron Chambers     I first commit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;One of the things I love about this workflow is that the merge to &lt;code&gt;master&lt;/code&gt; is 
+always a fast forward merge as the branch commits are always downstream of the 
+master commits.&lt;/p&gt;
+
+&lt;p&gt;If you get yourself into the habit of rebasing with &lt;code&gt;master&lt;/code&gt; often then you 
+greatly decrease your chance of
+having merge conflicts, and it also means you will always be developing on the 
+lastest code in master.&lt;/p&gt;
+
+&lt;p&gt;So, I&amp;#39;ll ask again. What does your git workflow look like?&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>Oracle and ActiveRecord on Linux</title>
       <link>http://blog.happyunlesshungry.com/posts/oracle-and-activerecord-on-linux</link>
@@ -316,65 +498,6 @@ Bar.new.save # =&amp;gt; undefined method `save&amp;#39; for #&amp;lt;Bar:0x007f
 &lt;p&gt;I&amp;#39;ve been working on this with a couple of friends from &lt;a href="www.laurenbugeja.com" title="www.laurenbugeja.com"&gt;www.laurenbugeja.com&lt;/a&gt; who&amp;#39;s initial idea this was, and who has been doing the UX design.&lt;/p&gt;
 
 &lt;p&gt;It&amp;#39;s been a fun little project and hopefully it will help anyone who is travelling in a far away country where brushing your teeth with the local water could mean the difference between fun memories and 10 days on the toilet.&lt;/p&gt;
-</description>
-    </item>
-    <item>
-      <title>Evolution Recruitment Agency - Can I trust them?</title>
-      <link>http://blog.happyunlesshungry.com/posts/evolution-recruitment-agency-can-i-trust-them</link>
-      <pubDate>2011-08-12</pubDate>
-      <description>&lt;p&gt;So I got a call from a recruiter this morning. The call started off as normal. &amp;quot;&lt;strong&gt;Hi, this is David Dowdall blah blah blah. I have some roles in the Finance industry I think you&amp;#39;ll be interested in blah blah blah&lt;/strong&gt;&amp;quot;.&lt;/p&gt;
-
-&lt;p&gt;So, I stopped David there to tell him that I&amp;#39;m not interested in the finance industry and this is where it started to turn a bit strange. And by that I mean I started to get a feeling that David was taking me for a fool.&lt;/p&gt;
-
-&lt;p&gt;David started banging on about something along the lines of needing to confirm some details with me for secuirty reasons. Security reasons?  Do you have a top secret role for me in the NSA?  He needed to confirm my name and last 2 places of work, and really needed my line manager&amp;#39;s name and contact details as references so that my CV would look credible and the client would look favourably on my application.&lt;/p&gt;
-
-&lt;p&gt;Now HOLD ON THERE David. What client?  What application?  You haven&amp;#39;t even mentioned any role to me and I sure has hell haven&amp;#39;t asked you to put me forward for it.&lt;/p&gt;
-
-&lt;p&gt;He went on to ask for details on the interviews that I have coming up. And of course that was for my benefit as well so that he wouldn&amp;#39;t put me forward for any of the same companies. Again, HOLD YOUR HORSES David. There won&amp;#39;t be any problem of that happening either because you won&amp;#39;t be putting me forward for anything without me giving you permission first.&lt;/p&gt;
-
-&lt;p&gt;So, after our conversation where David was obviously digging for leads and obviously had no roles for me, I received an email from him. It went as follows:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Hi Aaron,
-&lt;br/&gt;&lt;br/&gt;
-Many thanks for your time. 
-Please click here to enter your references from your most recent employers. It would be good, where possible, to show them to
-companies that are interested in you. This will really help you get the position you want as it creates credibility with your
-application.
-&lt;br/&gt;&lt;br/&gt;
-Ideally the references you give will be/have been, your direct line manager at the company. Include your current/most recent
-employer; however they will not be approached without your prior written permission.
-&lt;br/&gt;&lt;br/&gt;
-In addition, in reply to this email, it is important that you keep me updated with any details of where you have sent your CV
-and where you have been/are going for interview. This includes company applied for, location, role applied for and manager&amp;#39;s
-name if possible.
-&lt;br/&gt;&lt;br/&gt;
-This is so that any applications I make on your behalf will not damage any pre-existing applications, this will save wasting
-your time and help me work faster.
-&lt;br/&gt;&lt;br/&gt;
-Finally, please keep me up to date with your employment situation i.e. interviews or job offers as it would be unfair to put
-you forward to anyone should your situation change.
-&lt;br/&gt;&lt;br/&gt;
-Speak to you soon,
-&lt;br/&gt;&lt;br/&gt;
-David Dowdall&lt;br&gt;
-Senior Recruitment Consultant&lt;br&gt;
-Evolution Recruitment Solutions Ltd  &lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;So not only do I need to go to a page on their website and input the contact details of two of my references, before even having a role to interview for but I need to keep David updated with where I send my CV, where I have been and am going for interviews including the company and interviewing manager&amp;#39;s name.&lt;/p&gt;
-
-&lt;p&gt;And I need to do all of this for &lt;strong&gt;MY&lt;/strong&gt; benefit apparently. Sounds so fishy it isn&amp;#39;t funny.&lt;/p&gt;
-
-&lt;p&gt;Funnily enough I had a read through this &lt;a href="http://www.contractoruk.com/agencies/agency_tricks_on_it_contractors_still_common.html" title="Contractor UK"&gt;link&lt;/a&gt; on Contractor UK and it describes a few tactics very similar to what David displayed in his interactions with me today. &lt;/p&gt;
-
-&lt;p&gt;I&amp;#39;ve got to say, this is the first time I have had this sort of contact from a recruiter and the first time that I hung up the phone feeling like the recruiter was blatantly trying to dupe me.&lt;/p&gt;
-
-&lt;p&gt;Maybe I have all this wrong and please correct me if I do, but I won&amp;#39;t be giving any information to David or Evolution Recruitment now or in the future.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;UPDATE&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;A quick search turned up this &lt;a href="http://uk.linkedin.com/in/daviddowdalljava" title="David Dowdall LinkedIn"&gt;LinkedIn&lt;/a&gt; profile which one would assume belongs to the same David that was in contact with me. From that page, it looks like David has only been working at Evolution Recruitment for a month, or less. So David, you&amp;#39;re new to the position and need to build up some leads. Fair enough. But don&amp;#39;t take me as a fool mate.&lt;/p&gt;
 </description>
     </item>
   </channel>

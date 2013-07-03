@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>My Git Workflow</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Aaron Chambers">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+<link href='/assets/stylesheets/bootstrap.min-88238289010db19359d2181e634e95cd.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/assets/stylesheets/style-e81fa375b231bedf6cb2dbc6653570cc.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/assets/stylesheets/google_prettify/sons-of-obsidian-afb0925bfa2d994f17dab93e13fbf999.css' type='text/css' rel='stylesheet' media='all'>
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">happy unless hungry</a>
+          <ul class="nav">
+              
+                <li><a href="/archive">Archive</a></li>
+              
+              
+                <li><a href="/tags">Tags</a></li>
+              
+              
+                <li><a href="/categories">Categories</a></li>
+              
+              
+                <li><a href="/pages">Pages</a></li>
+              
+              
+                <li><a href="/about">About Me</a></li>
+              
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+
+<div class="page-header">
+  <h1>My Git Workflow </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>2013-06-30</strong>
+    </div>
+    <div class="content">
+      <p>What does your git workflow look like?</p>
+
+<p>Since I started using git about 2 years ago I&#39;ve constantly been trying to 
+improve my git workflow. As I began to form a clearer picture in my mnind of 
+how git stores commits, how branches work, how merging works etc, I slowly refined 
+how I go about committing to my projects. While I&#39;m far from  a git 
+guru, I&#39;m pretty happy with my current workflow so thought I&#39;d share it.  </p>
+
+<h2 id="toc_0">A clean slate</h2>
+
+<p>Firstly, make sure <code>master</code> is up to date.</p>
+
+<pre><code>df21be6 Aaron Chambers     o [master] [origin/master] Test commit
+37cedd7 Aaron Chambers     I first commit
+</code></pre>
+
+<h2 id="toc_1">Branch out and commit away</h2>
+
+<p>Now, create a local branch and commit until your heart&#39;s content.</p>
+
+<pre><code>~/code/my-project (master)$ git checkout -b bug-fix
+Switched to a new branch &#39;bug-fix&#39;
+
+~/code/my-project (bug-fix)$ echo &quot;Fixing bugs&quot; &gt;&gt; README.md
+~/code/my-project (bug-fix)$ git commit -am &quot;Swatting bugs&quot;
+[bug-fix 2e2b000] Swatting bugs
+ 1 file changed, 1 insertion(+)
+
+~/code/my-project (bug-fix)$ echo &quot;Fixing more bugs&quot; &gt;&gt; README.md
+~/code/my-project (bug-fix)$ git commit -am &quot;Getting out the bug spray&quot;
+[bug-fix 9917b19] Getting out the bug spray
+ 1 file changed, 1 insertion(+)
+
+~/code/my-project (bug-fix)$ echo &quot;Fixing yet more bugs&quot; &gt;&gt; README.md
+~/code/my-project (bug-fix)$ git commit -am &quot;And now for the bug zapper&quot;
+[bug-fix 1fdd4c2] And now for the bug zapper
+ 1 file changed, 1 insertion(+)
+</code></pre>
+
+<p>If we have a quick look at the commit tree we can see things look pretty good. 
+My branch commits come directly after the last commit on <code>master</code> (<code>df21be6</code>).</p>
+
+<pre><code>928041a Aaron Chambers     o [bug-fix] And now for the bug zapper
+ed49f8b Aaron Chambers     o Getting out the bug spray
+21dffcd Aaron Chambers     o Swatting bugs
+df21be6 Aaron Chambers     o [master] [origin/master] Test commit
+37cedd7 Aaron Chambers     I first commit
+</code></pre>
+
+<h2 id="toc_2">Pull me oh master</h2>
+
+<p>Now we need to go back to <code>master</code> and see if anyone else has committed to it 
+since we last pulled.</p>
+
+<pre><code>~/code/my-project (bug-fix)$ git checkout master
+Switched to branch &#39;master&#39;
+
+~/code/my-project (master)$ git pull
+remote: Counting objects: 8, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 6 (delta 0), reused 6 (delta 0)
+Unpacking objects: 100% (6/6), done.
+From github.com:achambers/test
+   df21be6..deb4a17  master     -&gt; origin/master
+Updating df21be6..deb4a17
+Fast-forward
+ README.md | 2 ++
+ 1 file changed, 2 insertions(+)
+</code></pre>
+
+<p>Well, well, well. It seems someone has been pushing some work to <code>master</code>. We can 
+see that the commit tree has branched at commit <code>df21be6</code>.</p>
+
+<pre><code>deb4a17 Will Smith         o [master] [origin/master] Made some more awesome
+6597417 Will Smith         o Added awesome features
+928041a Aaron Chambers     │ o [bug-fix] And now for the bug zapper
+ed49f8b Aaron Chambers     │ o Getting out the bug spray
+21dffcd Aaron Chambers     │ o Swatting bugs
+df21be6 Aaron Chambers     I─┘ Test commit
+37cedd7 Aaron Chambers     I first commit
+</code></pre>
+
+<p>I don&#39;t really have a good reason other than a touch of OCD but the whole reason 
+I  use this workflow is because I am not a fan of merge commits. I like to see 
+my commit history looking like a nice straight line. This is partially for 
+asthetic reasons, and partially because I find it easier for my brain to digest 
+when it is a straight line. Either way, I like to take pride in my commit history 
+and I think this workflow does that well.</p>
+
+<p>Therefore we are trying to AVOID the following.</p>
+
+<pre><code>fhd65j6 Aaron Chambers     M─┐ [master] [origin/master] Merged branch &#39;bug-fix&#39;
+deb4a17 Will Smith         o │ Made some more awesome
+6597417 Will Smith         o │ Added awesome features
+928041a Aaron Chambers     │ o And now for the bug zapper
+ed49f8b Aaron Chambers     │ o Getting out the bug spray
+21dffcd Aaron Chambers     │ o Swatting bugs
+df21be6 Aaron Chambers     I─┘ Test commit
+37cedd7 Aaron Chambers     I first commit
+</code></pre>
+
+<h2 id="toc_3">All your rebase are belong to us</h2>
+
+<p>So, in order to get rid of that pesky merge commit, we need to checkout our 
+<code>bug-fix</code> branch again and rebase it with <code>master</code>.</p>
+
+<pre><code>~/code/my-project (master)$ git checkout bug-fix
+Switched to branch &#39;bug-fix&#39;
+
+~/code/my-project (bug-fix)$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: Swatting bugs
+Applying: Getting out the bug spray
+Applying: And now for the bug zapper
+</code></pre>
+
+<p>That&#39;s better. That&#39;s what I like to see. Our <code>bug-fix</code> branch now contains all 
+the commits from <code>master</code>, and then our commits on top of those. In one sexy 
+straight line. Nice! </p>
+
+<pre><code>928041a Aaron Chambers     o [bug-fix] And now for the bug zapper
+ed49f8b Aaron Chambers     o Getting out the bug spray
+21dffcd Aaron Chambers     o Swatting bugs
+deb4a17 Will Smith         o [master] [origin/master] Made some more awesome
+6597417 Will Smith         o Added awesome features
+df21be6 Aaron Chambers     o Test commit
+37cedd7 Aaron Chambers     I first commit
+</code></pre>
+
+<h2 id="toc_4">Wrap it all up</h2>
+
+<p>Finally, merge the <code>bug-fix</code> branch into <code>master</code> and we&#39;re done.</p>
+
+<pre><code>~/code/my-project (bug-fix)$ git checkout master
+Switched to branch &#39;master&#39;
+
+~/code/my-project (master)$ git merge bug-fix
+Updating deb4a17..928041a
+Fast-forward
+ README.md | 3 +++
+ 1 file changed, 3 insertions(+)
+
+~/code/my-project (master)$ git push
+Counting objects: 11, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (9/9), 823 bytes, done.
+Total 9 (delta 0), reused 0 (delta 0)
+To git@github.com:achambers/test.git
+   deb4a17..928041a  master -&gt; master
+
+~/code/my-project (master)$ git branch -d bug-fix
+Deleted branch bug-fix (was 928041a).
+</code></pre>
+
+<p>Check out that nice straight line.</p>
+
+<pre><code>2013-06-30 22:54 Aaron Chambers     o [master] [origin/master] And now for the bug zapper
+2013-06-30 22:53 Aaron Chambers     o Getting out the bug spray
+2013-06-30 22:53 Aaron Chambers     o Swatting bugs
+2013-06-30 23:02 Will Smith         o Made some more awesome
+2013-06-30 23:01 Will Smith         o Added awesome features
+2013-06-30 22:49 Aaron Chambers     o Test commit
+2013-06-30 22:47 Aaron Chambers     I first commit
+</code></pre>
+
+<p>One of the things I love about this workflow is that the merge to <code>master</code> is 
+always a fast forward merge as the branch commits are always downstream of the 
+master commits.</p>
+
+<p>If you get yourself into the habit of rebasing with <code>master</code> often then you 
+greatly decrease your chance of
+having merge conflicts, and it also means you will always be developing on the 
+lastest code in master.</p>
+
+<p>So, I&#39;ll ask again. What does your git workflow look like?</p>
+
+    </div>
+    <div class="info-box well span12" style="margin-top: 25px;">
+      <div class="span2">
+        <img src=https://plus.google.com/s2/photos/profile/110082834525527581229?sz=90 class="img-circle">
+      </div>
+      <div class="span10">
+	<p>
+          <strong>Written by Aaron Chambers</strong>
+	</p>
+	<p>
+          Aaron Chambers is a geek, super passionate about all things web.
+	  He is currently employed to build awesome Ruby apps at <a href="http://sky.com">BSkyB</a> 
+	  and you can find him scattered around the web
+	  on <a href="https://plus.google.com/110082834525527581229?rel=author">Google+</a>, <a href="https://twitter.com/grandazz">Twitter</a> and <a href="https://github.com/achambers">Github</a>.
+	</p>
+      </div>
+    </div>
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+    </ul>
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      <li>
+        <a href="/tags#Git-ref">Git <span>2</span></a>
+      </li>
+      <li>
+        <a href="/tags#Learning-ref">Learning <span>2</span></a>
+      </li>
+    </ul>
+    <hr>
+    <div class="pagination">
+      <ul>
+          <li class="prev"><a href="/posts/oracle-and-activerecord-on-linux" title="Oracle and ActiveRecord on Linux">&larr; Previous</a></li>
+
+          <li><a href="/archive">Archive</a></li>
+
+          <li class="next disabled"><a>Next &rarr;</a>
+      </ul>
+    </div>
+    <hr>
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <hr>
+      <div class="footer">
+        <p>&copy; Aaron Chambers 2013
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Google Prettify -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+<script>
+  var pres = document.getElementsByTagName("pre");
+  for (var i=0; i < pres.length; ++i) {
+    pres[i].className = "prettyprint linenums";
+  }
+  prettyPrint();
+</script>
+<!-- end Google Prettify -->
+
+    
+    
+  </body>
+</html>

@@ -61,6 +61,84 @@
 <div class="row-fluid">
   <div class="span12">
     <div class="post">
+  <h3 class="title"><a href="/posts/my-git-workflow">My Git Workflow</a> <span class="date">2013-06-30</span></h3>
+
+  <p>What does your git workflow look like?</p>
+
+<p>Since I started using git about 2 years ago I&#39;ve constantly been trying to 
+improve my git workflow. As I began to form a clearer picture in my mnind of 
+how git stores commits, how branches work, how merging works etc, I slowly refined 
+how I go about committing to my projects. While I&#39;m far from  a git 
+guru, I&#39;m pretty happy with my current workflow so thought I&#39;d share it.  </p>
+
+<h2 id="toc_0">A clean slate</h2>
+
+<p>Firstly, make sure <code>master</code> is up to date.</p>
+
+<pre><code>df21be6 Aaron Chambers     o [master] [origin/master] Test commit
+37cedd7 Aaron Chambers     I first commit
+</code></pre>
+
+<h2 id="toc_1">Branch out and commit away</h2>
+
+<p>Now, create a local branch and commit until your heart&#39;s content.</p>
+
+<pre><code>~/code/my-project (master)$ git checkout -b bug-fix
+Switched to a new branch &#39;bug-fix&#39;
+
+~/code/my-project (bug-fix)$ echo &quot;Fixing bugs&quot; &gt;&gt; README.md
+~/code/my-project (bug-fix)$ git commit -am &quot;Swatting bugs&quot;
+[bug-fix 2e2b000] Swatting bugs
+ 1 file changed, 1 insertion(+)
+
+~/code/my-project (bug-fix)$ echo &quot;Fixing more bugs&quot; &gt;&gt; README.md
+~/code/my-project (bug-fix)$ git commit -am &quot;Getting out the bug spray&quot;
+[bug-fix 9917b19] Getting out the bug spray
+ 1 file changed, 1 insertion(+)
+
+~/code/my-project (bug-fix)$ echo &quot;Fixing yet more bugs&quot; &gt;&gt; README.md
+~/code/my-project (bug-fix)$ git commit -am &quot;And now for the bug zapper&quot;
+[bug-fix 1fdd4c2] And now for the bug zapper
+ 1 file changed, 1 insertion(+)
+</code></pre>
+
+<p>If we have a quick look at the commit tree we can see things look pretty good. 
+My branch commits come directly after the last commit on <code>master</code> (<code>df21be6</code>).</p>
+
+<pre><code>928041a Aaron Chambers     o [bug-fix] And now for the bug zapper
+ed49f8b Aaron Chambers     o Getting out the bug spray
+21dffcd Aaron Chambers     o Swatting bugs
+df21be6 Aaron Chambers     o [master] [origin/master] Test commit
+37cedd7 Aaron Chambers     I first commit
+</code></pre>
+
+<h2 id="toc_2">Pull me oh master</h2>
+
+<p>Now we need to go back to <code>master</code> and see if anyone else has committed to it 
+since we last pulled.</p>
+
+<pre><code>~/code/my-project (bug-fix)$ git checkout master
+Switched to branch &#39;master&#39;
+
+~/code/my-project (master)$ git pull
+remote: Counting objects: 8, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 6 (delta 0), reused 6 (delta 0)
+Unpacking objects: 100% (6/6), done.
+From github.com:achambers/test
+   df21be6..deb4a17  master     -&gt; origin/master
+Updating df21be6..deb4a17
+Fast-forward
+ README.md | 2 ++
+ 1 file changed, 2 insertions(+)
+</code></pre>
+
+
+  <div class="more">
+    <a href="/posts/my-git-workflow" class="btn btn-small">read more..</a>
+  </div>
+</div>
+<div class="post">
   <h3 class="title"><a href="/posts/oracle-and-activerecord-on-linux">Oracle and ActiveRecord on Linux</a> <span class="date">2012-04-04</span></h3>
 
   <p>So, I&#39;ve been playing with <a href="http://vagrantup.com/" title="Vagrant">Vagrant</a> over the last day or so in the hope that we can use it to speed up the time it takes to get new starters up and running and also to speed up our cucumber test suite for the windows users among our team.</p>
@@ -96,6 +174,23 @@ vagrant@lucid32:~$ cd /vagrant
 vagrant@lucid32:~$ gem install ruby-oci8
 vagrant@lucid32:~$ sudo apt-get install libaio-dev
 </code></pre>
+
+<ul>
+<li>To test that this all worked, run the following:</li>
+</ul>
+
+<pre><code class="bash">vagrant@lucid32:~$ irb
+
+irb(main):001:0&gt; require &#39;rubygems&#39;
+irb(main):001:0&gt; require &#39;oci8&#39;
+</code></pre>
+
+<p>And there you have it!</p>
+
+<p>PS, A couple of props to the sites that helped me achieve this solution:</p>
+
+<p><a href="http://www.darianshimy.com/2011/09/ruby-oci8-library-problems/">http://www.darianshimy.com/2011/09/ruby-oci8-library-problems</a><br>
+<a href="http://ruby-oci8.rubyforge.org/en/InstallForInstantClient.html">http://ruby-oci8.rubyforge.org/en/InstallForInstantClient.html</a></p>
 
 
   <div class="more">
@@ -137,6 +232,49 @@ vagrant@lucid32:~$ sudo apt-get install libaio-dev
 
 <blockquote>
 <p>rest/api/supplier<strong>s</strong>/{id}</p>
+</blockquote>
+
+<p>Notice the <code>s</code>? It is a very small point, and it&#39;s all semantics, however, I still think it&#39;s important. The supplier I want is in the list of suppliers that lives inside the <code>suppliers</code> folder.</p>
+
+<p>Next up, lets have a quick look at:</p>
+
+<blockquote>
+<p>/rest/api/expense/expenseTypes<br>
+/rest/api/expense/paymentMethods</p>
+</blockquote>
+
+<p>Once again, if we follow the folder theme, it doesn&#39;t, in my mind, make sense that I would look in the expense folder to find a list of possible expenseTypes or paymentMethods. To me, I would have my <code>expenses</code> folder which contained my list of expenses and then when I wanted to find the possible list of expenseTypes, I&#39;d probably find that in it&#39;s own folder at the top level like so:</p>
+
+<blockquote>
+<p>/rest/api/expense_types</p>
+</blockquote>
+
+<p>Likewise, I&#39;d probably do the same thing with payment methods:</p>
+
+<blockquote>
+<p>/rest/api/payment_methods</p>
+</blockquote>
+
+<p>The reason behind this is they are, in a way, top level resources. They don&#39;t live as subordinates of an expense, or anything else really.</p>
+
+<p>Now on to accounts. Let&#39;s have a look at your current URI&#39;s:</p>
+
+<blockquote>
+<p>/rest/api/accounts/allAccounts<br>
+/rest/api/accounts/bankAccounts<br>
+/rest/api/accounts/creditCards</p>
+</blockquote>
+
+<p>Thinking back to the folder analogy, on my filesystem, I don&#39;t think I&#39;d arrange my accounts in <code>allAccounts</code>, <code>bankAccounts</code> and <code>creditCards</code> folders underneath an <code>accounts</code> folder. That doesn&#39;t really make sense to me. In my mind it would make more sense to have all my accounts sitting inside the <code>accounts</code> folder and each account would have a type. So when I want to get a list of all my accounts I&#39;d probably go to:</p>
+
+<blockquote>
+<p>/rest/api/accounts</p>
+</blockquote>
+
+<p>If I wanted only accounts that were bank accounts, I&#39;d probably look for accounts, in the <code>accounts</code> folder that have a type <code>bankAccount</code> like so:</p>
+
+<blockquote>
+<p>/rest/api/accounts?type=bank_account</p>
 </blockquote>
 
 
@@ -181,6 +319,8 @@ Bar.save # =&gt; Tweet saved
 Bar.new.save # =&gt; undefined method `save&#39; for #&lt;Bar:0x007f813104e0e8&gt; (NoMethodError)
 </code></pre>
 
+<p>A small shout out to <a href="http://railstips.org/blog/archives/2009/05/15/include-vs-extend-in-ruby/" title="Rails Tips">John Nunemaker</a> who&#39;s post I found that explain&#39;s this concept nicely.</p>
+
 
   <div class="more">
     <a href="/posts/include-vs-extend-whats-the-difference" class="btn btn-small">read more..</a>
@@ -202,54 +342,6 @@ Bar.new.save # =&gt; undefined method `save&#39; for #&lt;Bar:0x007f813104e0e8&g
 
   <div class="more">
     <a href="/posts/is-the-water-safe-to-drink" class="btn btn-small">read more..</a>
-  </div>
-</div>
-<div class="post">
-  <h3 class="title"><a href="/posts/evolution-recruitment-agency-can-i-trust-them">Evolution Recruitment Agency - Can I trust them?</a> <span class="date">2011-08-12</span></h3>
-
-  <p>So I got a call from a recruiter this morning. The call started off as normal. &quot;<strong>Hi, this is David Dowdall blah blah blah. I have some roles in the Finance industry I think you&#39;ll be interested in blah blah blah</strong>&quot;.</p>
-
-<p>So, I stopped David there to tell him that I&#39;m not interested in the finance industry and this is where it started to turn a bit strange. And by that I mean I started to get a feeling that David was taking me for a fool.</p>
-
-<p>David started banging on about something along the lines of needing to confirm some details with me for secuirty reasons. Security reasons?  Do you have a top secret role for me in the NSA?  He needed to confirm my name and last 2 places of work, and really needed my line manager&#39;s name and contact details as references so that my CV would look credible and the client would look favourably on my application.</p>
-
-<p>Now HOLD ON THERE David. What client?  What application?  You haven&#39;t even mentioned any role to me and I sure has hell haven&#39;t asked you to put me forward for it.</p>
-
-<p>He went on to ask for details on the interviews that I have coming up. And of course that was for my benefit as well so that he wouldn&#39;t put me forward for any of the same companies. Again, HOLD YOUR HORSES David. There won&#39;t be any problem of that happening either because you won&#39;t be putting me forward for anything without me giving you permission first.</p>
-
-<p>So, after our conversation where David was obviously digging for leads and obviously had no roles for me, I received an email from him. It went as follows:</p>
-
-<blockquote>
-<p>Hi Aaron,
-<br/><br/>
-Many thanks for your time. 
-Please click here to enter your references from your most recent employers. It would be good, where possible, to show them to
-companies that are interested in you. This will really help you get the position you want as it creates credibility with your
-application.
-<br/><br/>
-Ideally the references you give will be/have been, your direct line manager at the company. Include your current/most recent
-employer; however they will not be approached without your prior written permission.
-<br/><br/>
-In addition, in reply to this email, it is important that you keep me updated with any details of where you have sent your CV
-and where you have been/are going for interview. This includes company applied for, location, role applied for and manager&#39;s
-name if possible.
-<br/><br/>
-This is so that any applications I make on your behalf will not damage any pre-existing applications, this will save wasting
-your time and help me work faster.
-<br/><br/>
-Finally, please keep me up to date with your employment situation i.e. interviews or job offers as it would be unfair to put
-you forward to anyone should your situation change.
-<br/><br/>
-Speak to you soon,
-<br/><br/>
-David Dowdall<br>
-Senior Recruitment Consultant<br>
-Evolution Recruitment Solutions Ltd  </p>
-</blockquote>
-
-
-  <div class="more">
-    <a href="/posts/evolution-recruitment-agency-can-i-trust-them" class="btn btn-small">read more..</a>
   </div>
 </div>
 
